@@ -87,6 +87,10 @@ class User extends Authenticatable
         $follow_user_ids = $this->followings()-> pluck('users.id')->toArray();
         $follow_user_ids[] = $this->id;
         return Micropost::whereIn('user_id', $follow_user_ids);
+        
+        $favorite_user_ids = $this->favoritings()-> pluck('users.id')->toArray();
+        $favorite_user_ids[] = $this->id;
+        return Micropost::whereIn('user_id', $favorite_user_ids);
     }
     
     
@@ -129,12 +133,14 @@ public function unfavorite($userId)
         // do nothing if not following
         return false;
     }
-}
+    }       
 
 
-public function is_favoriting($userId) {
-    return $this->favoritings()->where('favorite_id', $userId)->exists();
-}
+    public function is_favoriting($userId) {
+        return $this->favoritings()->where('favorite_id', $userId)->exists();
+    }
+    
+
 
 }
 
